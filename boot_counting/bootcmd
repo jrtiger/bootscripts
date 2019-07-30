@@ -1,0 +1,17 @@
+
+setenv zero-in "echo u-boot count return to zero...; mw.w ${loadaddr} 0 1; fatwrite mmc ${mmcdev}:${mmcpart} ${loadaddr} .splcount 2;"
+
+echo "======== u-boot counting ========"
+
+if fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} .splcount; then
+	setexpr.w count_spl *${loadaddr};
+	setexpr.w count_spl ${count_spl} + 1;
+	mw.w ${loadaddr} ${count_spl} 1;
+	echo "=================================";
+	echo "Value(HEX)";
+	md.w ${loadaddr} 1;
+	echo "=================================";
+	fatwrite mmc ${mmcdev}:${mmcpart} ${loadaddr} .splcount 2;
+else
+	echo "Please run zero-in first"
+fi;
