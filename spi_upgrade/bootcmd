@@ -1,0 +1,25 @@
+echo "======== SPI Flash upgrade ========"
+
+if fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} SPL; then
+	if fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} u-boot.img; then
+		echo "Found SPL and u-boot.img in MMC device";
+		echo "Starting to flash SPI ROM...";
+		sf probe;
+		echo "Erasing flash.....";
+		sf erase 0x0 0xc0000;
+		echo "Load SPL file from MMC device";
+		fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} SPL;
+		echo "Write SPL to SPI Flash";
+		sf write ${loadaddr} 0x400 0x10000;
+		sf erase 0x10000 0x70000;
+		echo "Load u-boot.img file from MMC device";
+		fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} u-boot.img;
+		echo "Write u-boot.img to SPI Flash";
+		sf write ${loadaddr} 0x10000 0x70000;
+		echo "============== Done ==============";
+	else
+		echo "u-boot.img missing in MMC device";
+	fi
+else
+	echo "Please put SPL/u-boot.img in MMC device"
+fi;
