@@ -4,6 +4,7 @@ u-boot scripts
 This folder contains all the boot scripts for u-boot:
 * `boot_counting`: boot script for POWER ON/OFF test
 * `boot_counting_sata`: boot script for POWER ON/OFF test from SATA device
+* `boot_qnx`: boot script for QNX OS using qnx-ifs
 
 Those `bootcmd` files need to be transformed into u-boot scripts (`.scr`) using `mkimage`.
 
